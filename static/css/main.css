@@ -1,0 +1,49 @@
+
+
+/* ==========================================================================
+Author's custom styles
+========================================================================== */
+
+
+
+
+body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+    background-color:transparent;
+}
+
+/* white background */
+div.container {
+     background: rgba(255, 255, 255, 0.6);
+}
+
+h1.pageheader a, h1.pageheader a:hover {
+    font-family: 'Peralta', cursive;
+    font-size:65px;
+    line-height:72px;
+
+    color:red;
+    text-shadow: 3px 3px 3px #000;
+    text-align:center;
+
+}
+
+p,li, label {
+    font-size:18px;
+}
+
+footer { text-align: center;}
+
+
+
+
+
+
+
+
+
+
+
+
+
