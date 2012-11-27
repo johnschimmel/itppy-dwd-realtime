@@ -1,9 +1,10 @@
 import os, datetime
 
-from flask import Flask, request # Retrieve Flask, our framework
+from flask import Flask, request, jsonify # Retrieve Flask, our framework
 from flask import render_template
 
-import pusher
+import pusher # Pusher.com python library
+import requests # used to make calls to remote youtube api
 
 app = Flask(__name__)   # create our flask app
 
@@ -23,21 +24,132 @@ def index():
 	}
 	return render_template("main.html", **templateData)
 
-@app.route("/pushit", methods=['POST'])
-def pushit():
 
-	msg = request.form.get('msg')
-	
-	if msg:
-		p['couch_potato'].trigger('incoming_youtube',{'msg':msg})
-		return "sent " + msg
+# ajax demo
+@app.route('/ajax')
+def ajax_demo():
+
+	return render_template('ajax_demo.html')
+
+# CHAT ROUTE
+# GET --> renders push_chat.html
+# POST --> accepts 'msg' form field and triggers PUSHER event
+@app.route('/chat', methods=['GET','POST'])
+def chat_demo():
+
+	# received a POST request
+	if request.method == 'POST':
+		chatmsg = request.form.get('msg')
+		
+		if chatmsg:
+			p['chat_demo'].trigger('incoming_chat',{'msg':chatmsg})
+			return jsonify(status='OK',message='message sent:%s' % chatmsg)
+		else:
+			return jsonify(status='ERROR',message='no chatmsg was received')
 
 	else:
-		return "did not receive msg"
+
+		# GET request render template with pusher_key
+		templateData = {
+			'PUSHER_KEY' : os.environ.get('PUSHER_KEY')
+		}
+		return render_template('pusher_chat.html', **templateData)
+
+
+@app.route("/couch", methods=['GET','POST'])
+def pushit():
+
+# received a POST request
+	if request.method == 'POST':
+		query = request.form.get('query')
+		
+		# query youtube
+		videos = query_youtube_api(query)
+		if videos:
+
+			# Trigger PUSH message
+			p['couch_potato'].trigger('incoming_youtube',{ 'video':videos[0] })
+
+			# reply to POST request
+			return jsonify(status='OK',message='query received:%s' % query)
+		
+	
+		else:
+			return jsonify(status='ERROR',message='no videos found.')
+
+	else:
+
+		# GET request render template with pusher_key
+		templateData = {
+			'PUSHER_KEY' : os.environ.get('PUSHER_KEY')
+		}
+		return render_template('pusher_couch.html', **templateData)
+
+
+
+# /youtube_query POST route
+# accepts 'query' field and searches youtube api v2.
+# returns youtube as json
+@app.route("/youtube_query",methods=['POST'])
+def youtube_query():
+
+	query = request.form.get('query')
+
+	if query:
+
+		videos = query_youtube_api(query)
+			
+		response_data = {
+			'status' : 'OK',
+			'videos' : videos
+		}
+
+	else:
+		response_data = {
+			'status' : 'error',
+			'msg' : 'no query provided',
+
+		}
+
+	return jsonify(response_data)
 
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html'), 404
+
+
+def query_youtube_api(query):
+	query_options = {
+		'q':query,
+		'order' : 'relevance',
+		'alt' : 'json'
+	}
+	youtube_api_url = 'https://gdata.youtube.com/feeds/api/videos'
+
+	# make youtube api request
+	yt_result = requests.get(youtube_api_url, params=query_options)
+
+	app.logger.info(yt_result)
+	if yt_result.status_code == 200:
+		videos = yt_result.json['feed']['entry']
+		
+		# we got some videos from the api
+		# let's pull out the title and video id for each video
+		if len(videos) > 0:
+
+			video_info = []  # container for videos + information
+
+			for v in videos:
+				video_info.append({
+					'title' : v['title']['$t'],
+					'video_id' : v['id']['$t'].replace("http://gdata.youtube.com/feeds/api/videos/","")
+				})
+
+			return video_info
+		else:
+			return None
+	else:
+		return None
 
 
 # start the webserver

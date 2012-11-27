@@ -1,0 +1,86 @@
+{% extends "layout/main.html" %}
+
+{% block styles %}{% endblock %}
+
+{% block body %}
+
+<div class="row">
+
+	<div class="span5" id="searchform">
+		<h3>Search for YouTube videos</h3>
+		<input type="text" id="query" placeholder="Search YouTube">
+		<button id="search_btn" class="btn btn-success">Search</button>
+	</div>
+
+	<div class="span5" id="results">
+
+	</div>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+	<script>
+		jQuery(document).ready(function(){
+
+			// add click event to the search_btn
+			jQuery('#search_btn').click(youtube_ajax_search);
+
+		});
+
+		function youtube_ajax_search() {
+
+			// get value from query textbox
+			queryStr = jQuery("#query").val();
+
+			jQuery.ajax({
+				url : '/youtube_query',
+				type : 'POST',
+				data : { query : queryStr },
+				success : function(response) {
+
+					console.log("received...");
+					console.log(response);
+
+					// successful response status message 
+					// we're looking for 'OK'
+					if (response.status != 'OK') {
+						
+						//something went wrong...
+						console.error("received status error");
+
+					} else {
+
+						//success!
+
+						//clear out results div
+						jQuery("#results").html('');
+
+						//loop through video array and create html list items
+						for(i = 0; i<response.videos.length; i++){
+							var current_video = response.videos[i];
+
+							// build html link to youtube video with video_id + title
+							tmpLink = "<li><a href='http://www.youtube.com/watch?v="+current_video.video_id+"'>" + current_video.title + "</a></li>"
+
+							// .append will insert our new tmpLink html into the div #results.
+							jQuery("#results").append(tmpLink);
+						}
+
+
+					}
+
+				}, 
+				error : function(err) {
+					console.error("something went wrong")
+					console.error(err);
+				}
+
+			})
+
+		}
+	</script>
+
+{% endblock %}
