@@ -49,13 +49,12 @@
 
     	console.log(data); // log out the video info received
     	
-    	if (data.status == 'OK') {
-    		video_id = data.video.video_id; // get the video from incoming youtube message
-    		ytplayer.loadVideoById(video_id); // load youtube video	
+    	video_id = data.video.video_id; // get the video from incoming youtube message
+    	ytplayer.loadVideoById(video_id); // load youtube video	
 
-    		// set the video title 
-    		jQuery('#video_title').html(data.video.title);
-    	}
+    	// set the video title 
+    	jQuery('#video_title').html(data.video.title);
+    	
     	
     });
 
