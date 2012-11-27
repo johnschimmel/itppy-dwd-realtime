@@ -6,7 +6,7 @@
 
 <div class="row">
 	<div class="span8">
-		  
+		  <h3 id="video_title"></h3>
 		  <div id="ytapiplayer">
 		    You need Flash player 8+ and JavaScript enabled to view this video.
 		  </div>
@@ -52,6 +52,9 @@
     	if (data.status == 'OK') {
     		video_id = data.video.video_id; // get the video from incoming youtube message
     		ytplayer.loadVideoById(video_id); // load youtube video	
+
+    		// set the video title 
+    		jQuery('#video_title').html(data.video.title);
     	}
     	
     });
