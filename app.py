@@ -42,8 +42,13 @@ def chat_demo():
 		chatmsg = request.form.get('msg')
 		
 		if chatmsg:
+
+			# send message for broadcast to pusher
 			p['chat_demo'].trigger('incoming_chat',{'msg':chatmsg})
+
+			# respond to ajax request
 			return jsonify(status='OK',message='message sent:%s' % chatmsg)
+			
 		else:
 			return jsonify(status='ERROR',message='no chatmsg was received')
 
@@ -119,6 +124,8 @@ def page_not_found(error):
 
 
 def query_youtube_api(query):
+	# https://developers.google.com/youtube/2.0/developers_guide_json
+
 	query_options = {
 		'q':query,
 		'order' : 'relevance',

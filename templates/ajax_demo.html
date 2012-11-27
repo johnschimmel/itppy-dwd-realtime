@@ -27,18 +27,20 @@
 
 			// add click event to the search_btn
 			jQuery('#search_btn').click(youtube_ajax_search);
-
+			
 		});
+
 
 		function youtube_ajax_search() {
 
 			// get value from query textbox
-			queryStr = jQuery("#query").val();
+			var queryStr = jQuery("#query").val();
 
 			jQuery.ajax({
 				url : '/youtube_query',
 				type : 'POST',
 				data : { query : queryStr },
+				
 				success : function(response) {
 
 					console.log("received...");
