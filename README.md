@@ -33,112 +33,29 @@ See demo [http://rentspiritanimals.herokuapp.com/](http://rentspiritanimals.hero
 
 * If successful you can navigate to <a href='http://localhost:5000'>http://localhost:5000</a>.
 
+## jQuery
 
-# Templates
+jQuery is a very popular and useful Javascript library that is used to minimize the amount of Javascript you need to write to manipulate HTML DOM elements, add click events and AJAX functions. We will use AJAX in all the demos on this site.
 
-Templates keep your code separated from your code and vice versa. Using templates allows you to focus on the code, logic and data then pass the needed data to an HTML template.
+## PUSHER - Realtime Web Service
 
-People often call this MVC, of Model-View-Controller, where data structures (M), templates (V) and code (C) are separated into different files and directories.
+[Pusher.com](http://www.pusher.com) is a great way to add realtime events to your webapp.
 
-Our templates are located in the /templates directory. These can be organized in directories if needed. The templates are regular HTML files
+Register for an account at [http://pusher.com/](http://pusher.com/). You will need to create a .env file that includes the following information about your Pusher account.
 
-Using a template library, we can inject data into HTML with the template library specific syntax.
+**.env**
 
-Flask comes ready with Jinja2 for templates. Jinja2 is easy to use and learn, simple syntax. To use templates we'll include this line at the top of **app.py**,
+	PUSHER_APP_ID=XXXXXX
+	PUSHER_KEY=XXXXXXXXXXXXX
+	PUSHER_SECRET=XXXXXXXXXXXXXX
 
-	import render_template
+Save your .env file.
 
-## Template example
+You will have to push your new .env variables to Heroku config so their servers have your credientals.
 
-A basic HTML template with a single variable.
+In your code directory in Terminal run the following command.
 
-**index.html**
-
-	<html>
-		<title>My first template</title>
-		<body>
-			<h1>{{ message }}</h1>
-		</body>
-	</html>
-
-A Flask route, passing a variable into a template
-
-	@app.route('/')
-	def mainpage():
-		message = 'Hello World'
-		return render_template('index.html', message=message)
-
-
-## Template multiple variables example
-
-**index.html**
-
-	<html>
-		<title>My first template</title>
-		<body>
-			<h1>{{ message }}</h1>
-			<p>{{ a_sentence }}</p>
-		</body>
-	</html>
-
-The Flask route
-
-	@app.route('/')
-	def mainpage():
-		
-		templateData = {
-			'message' : 'Hello World',
-			'a_sentence' : 'A year passed: winter changed into spring, spring changed into summer, summer changed back into winter, and winter gave spring and summer a miss and went straight on into autumn... until one day..'
-		}
-
-		return render_template('index.html', **templateData)
-
-The ** operator in Python will convert a dictionary into a keyword list. The ** operator does the equilivent of this,
-	
-	return render_template('index.html', message = 'Hello World', a_sentence = 'A year passed....')
-
-## Jinja2 basic
-
-You can see all of Jinja2's reference guide here, [http://jinja.pocoo.org/docs/templates/](http://jinja.pocoo.org/docs/templates/)
-
-## Displaying a variable
-
-	{{ foo }}  <!-- string or int -->
-	{{ foo['bar'] }} <!-- bar from dictionary -->
-	{{ foo.bar }}  <!-- bar from object -->
-
-## Loops in
-
-	{% for name in names %}
-	<li>{{ name }}</li>
-	{% endfor %}
-
-## If/Elif/Else in Jinja2
-
-	{% if price == "1.00" %}
-	That's cheap!
-
-	{% elif price == "50.00" %}
-	Eh, okay, here's $50
-
-	{% else %}
-	I'll pay anything.
-
-	{% endif %}
-
-
-## Static files in Flask apps
-
-You can put your CSS, images, JavaScript and other static files inside **/static**. This directory is known to Flask as the static directory and files inside can be referenced directly. For example a file css/styles.css can be referenced
-
-	/static/css/styles.css
-
-Or an image, if it exists
-
-	/static/img/dog.jpg
-
-The static file directory can also be referenced inside your templates with a function
-
-	{{ url_for('static', filename='css/styles.css') }}
-	{{ url_for('static', filename='img/dog.jpg') }}
+	heroku config:add PUSHER_APP_ID=XXXXXX
+	heroku config:add PUSHER_KEY=XXXXXXXXXXXXXXX
+	heroku config:add PUSHER_SECRET=XXXXXXXXXXXXX
 
