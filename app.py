@@ -24,6 +24,9 @@ def index():
 	}
 	return render_template("main.html", **templateData)
 
+@app.route('/t')
+def t():
+	return "A"
 
 # ajax demo
 @app.route('/ajax')
