@@ -5,7 +5,6 @@
 ---------------
 
 ## Processing Sketch
-Located in the ***processing_json*** folder.
 Requires the [JSON-Processing library](https://github.com/agoransson/JSON-processing/downloads)
 
 [Download the library](https://github.com/agoransson/JSON-processing/downloads) and put it in your Processing Library  ~/Documents/Processing/libraries. Create the 'libraries' directory if it does not already exist. Restart Processing.
