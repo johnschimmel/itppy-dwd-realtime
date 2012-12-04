@@ -40,7 +40,7 @@ def index():
 
 @app.route('/arduino')
 def t():
-	return "A"
+	return "ABC"
 
 @app.route('/circles', methods=['GET','POST'])
 def circles():
