@@ -3,7 +3,8 @@ import org.json.*;
 ArrayList circles;
 Timer timer;
 
-String BASE_URL = "http://127.0.0.1:5000";
+//String BASE_URL = "http://127.0.0.1:5000";
+String BASE_URL = "http://itppy-realtime-demo.herokuapp.com";
 
 void setup() {
   circles = new ArrayList();
@@ -36,7 +37,7 @@ void draw() {
   }
 }
 
-
+// Will fetch a URL path based on the BASE_URL defined above
 JSONObject fetchJSON(String URL_PATH) {
 
 
