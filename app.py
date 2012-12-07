@@ -2,7 +2,7 @@ import os, datetime
 import random
 import json
 
-from flask import Flask, request, redirect # Retrieve Flask, our framework
+from flask import Flask, request,jsonify, redirect # Retrieve Flask, our framework
 from flask import render_template
 
 import pusher # Pusher.com python library
@@ -46,6 +46,7 @@ def t():
 def circles():
 
 	circle_form = models.circle_form(request.form)
+
 	if request.method=='POST' and circle_form.validate():
 
 		circle = models.Circle()
@@ -68,7 +69,6 @@ def circles():
 
 @app.route('/circles/processing_set')
 def processing_circle():
-
 
 	xpos = request.args.get('xpos')
 	ypos = request.args.get('ypos')
