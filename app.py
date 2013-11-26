@@ -2,7 +2,7 @@ import os, datetime
 import random
 import json
 
-from flask import Flask, request, redirect # Retrieve Flask, our framework
+from flask import Flask, request, redirect, jsonify # Retrieve Flask, our framework
 from flask import render_template
 
 import pusher # Pusher.com python library
@@ -103,7 +103,6 @@ def pushit():
 def youtube_query():
 
 	query = request.form.get('query')
-
 	if query:
 
 		videos = query_youtube_api(query)
@@ -129,21 +128,23 @@ def page_not_found(error):
 
 def query_youtube_api(query):
 	# https://developers.google.com/youtube/2.0/developers_guide_json
-
+	
 	query_options = {
 		'q':query,
 		'order' : 'relevance',
-		'alt' : 'json'
+		'alt' : 'json',
+		'max-results' : '2'
 	}
 	youtube_api_url = 'https://gdata.youtube.com/feeds/api/videos'
 
 	# make youtube api request
 	yt_result = requests.get(youtube_api_url, params=query_options)
-
-	app.logger.info(yt_result)
+	
+	# return yt_result.json()
 	if yt_result.status_code == 200:
-		videos = yt_result.json['feed']['entry']
+		data = yt_result.json()
 		
+		videos = data['feed']['entry']
 		# we got some videos from the api
 		# let's pull out the title and video id for each video
 		if len(videos) > 0:
@@ -155,7 +156,7 @@ def query_youtube_api(query):
 					'title' : v['title']['$t'],
 					'video_id' : v['id']['$t'].replace("http://gdata.youtube.com/feeds/api/videos/","")
 				})
-
+				
 			return video_info
 		else:
 			return None
