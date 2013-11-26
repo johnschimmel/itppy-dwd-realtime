@@ -1,10 +1,6 @@
-# Getting Started with Flask and Templates
-
-## Sample code
+# Realtime: Making intefaces for fun and the impatient
 
 See demo <http://itppy-realtime-demo.herokuapp.com/>
-
-## Realtime: Making intefaces for fun and the impatient
 
 This semester we've done a lot of GET & POST & GET & POST. We've waiting for pages to redirect and load. 
 
