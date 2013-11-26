@@ -2,8 +2,7 @@
 
 ## Sample code
 
-Download from [Github](https://github.com/johnschimmel/ITP-DWD-Week4-Templates).
-See demo [http://rentspiritanimals.herokuapp.com/](http://rentspiritanimals.herokuapp.com/).
+See demo <http://itppy-realtime-demo.herokuapp.com/>
 
 ## Realtime: Making intefaces for fun and the impatient
 
