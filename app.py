@@ -8,18 +8,8 @@ from flask import render_template
 import pusher # Pusher.com python library
 import requests # used to make calls to remote youtube api
 
-# import all of mongoengine
-from flask.ext.mongoengine import mongoengine
-import models
-
-
 app = Flask(__name__)   # create our flask app
 app.config['CSRF_ENABLED'] = False
-
-# --------- Database Connection ---------
-# MongoDB connection to MongoLab's database
-mongoengine.connect('mydata', host=os.environ.get('MONGOLAB_URI'))
-app.logger.debug("Connecting to MongoLabs")
 
 
 # configure pusher 
@@ -38,89 +28,6 @@ def index():
 	}
 	return render_template("main.html", **templateData)
 
-@app.route('/arduino')
-def t():
-	return "ABC"
-
-@app.route('/circles', methods=['GET','POST'])
-def circles():
-
-	circle_form = models.circle_form(request.form)
-	if request.method=='POST' and circle_form.validate():
-
-		circle = models.Circle()
-		circle.xpos = request.form.get('xpos')
-		circle.ypos = request.form.get('ypos')
-		circle.size = request.form.get('size')
-		circle.color = request.form.get('color')
-
-		circle.save()
-
-		return redirect('/circles')
-
-	else:
-
-		template_data = {
-			'form' : circle_form,
-			'num_circles' : models.Circle.objects.count()
-		}
-		return render_template('circle_form.html', **template_data)
-
-@app.route('/circles/processing_set')
-def processing_circle():
-
-
-	xpos = request.args.get('xpos')
-	ypos = request.args.get('ypos')
-
-	if xpos and ypos:
-		# create new circle
-		circle = models.Circle()
-		circle.xpos = xpos
-		circle.ypos = ypos
-		circle.color = '#000000'
-		circle.size = random.randrange(5,25)
-		circle.save()
-
-	return circle_json()
-	
-
-@app.route('/circle_json')
-def circle_json():
-
-	circles = models.Circle.objects()
-
-	if circles:
-		public_circles = []
-
-		#prep data for json
-		for c in circles:
-			public_circles.append({
-				'xpos' : c.xpos,
-				'ypos' : c.ypos,
-				'size' : c.size,
-				'color' : c.color.replace("#",""),
-				'_id' : str(c.id)
-				})
-			
-		# prepare dictionary for JSON return
-		data = {
-			'status' : 'OK',
-			'circles' : public_circles
-		}
-
-		# jsonify (imported from Flask above)
-		# will convert 'data' dictionary and 
-		return json.dumps(data)
-
-	else:
-		error = {
-			'status' : 'error',
-			'msg' : 'unable to retrieve ideas'
-		}
-		return json.dumps(error)
-
-	return "ok"
 
 # ajax demo
 @app.route('/ajax')
