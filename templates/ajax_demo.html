@@ -6,13 +6,13 @@
 
 <div class="row">
 
-	<div class="span5" id="searchform">
+	<div class="col-md-5" id="searchform">
 		<h3>Search for YouTube videos</h3>
 		<input type="text" id="query" placeholder="Search YouTube">
 		<button id="search_btn" class="btn btn-success">Search</button>
 	</div>
 
-	<div class="span5" id="results">
+	<div class="col-md-5" id="results">
 
 	</div>
 
@@ -22,6 +22,7 @@
 
 
 {% block scripts %}
+	 {{ super() }}
 	<script>
 		jQuery(document).ready(function(){
 

@@ -5,12 +5,12 @@
 {% block body %}
 
 <div class="row">
-	<div id="chatlist" class="span5">
+	<div id="chatlist" class="col-md-5">
 		<!-- message end up  here -->
 	</div>
 
 
-	<div class="span5" id="searchform">
+	<div class="col-md-5" id="searchform">
 		<input type="text" id="chatmsg" placeholder="Enter a message">
 		<button id="send_btn" class="btn btn-success" >Send Message</button>
 	</div>
@@ -25,7 +25,7 @@
 
 
 {% block scripts %}
-
+	 {{ super() }}
   <script src="http://js.pusher.com/1.12/pusher.min.js" type="text/javascript"></script>
   <script type="text/javascript">
     // Enable pusher logging - don't include this in production
